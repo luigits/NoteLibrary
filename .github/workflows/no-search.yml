@@ -81,7 +81,7 @@ jobs:
       - name: Unzip artifact
         run: |
           # 使用通配符替代变量，避免路径拼接错误
-          unzip -qq "${{ needs.build.outputs.artifact }}" -d dir
+          unzip -qq "artifacts/${{ needs.build.outputs.artifact }}" -d dir
           echo "=== 解压结果 ==="
           ls -R dir/ | head -20
   
