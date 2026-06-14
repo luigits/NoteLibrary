@@ -2,7 +2,7 @@ name: build no search
 on:
 
   push:
-    branches: ['master']
+#    branches: ['master']
   workflow_dispatch:
   # 定时的优先级太低，改用定量 push
 permissions:
@@ -70,7 +70,8 @@ jobs:
         with:
           name: docs
           path: artifacts
-      
+      - name: check files
+        run: ls -alh
       - name: Unzip artifact
         run: unzip -O UTF-8 -qq "artifacts/${{ needs.build.outputs.artifact }}" -d dir
       
