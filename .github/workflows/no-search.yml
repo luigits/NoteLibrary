@@ -70,20 +70,19 @@ jobs:
         with:
           name: docs
           path: artifacts
-  
-      - name: Check & Validate ZIP
+
+      - name: Verify & Extract
         run: |
-          echo "=== 目录内容 ==="
-          ls -alh artifacts/
-          echo "=== 文件真实类型 ==="
-          file artifacts/*.zip
-  
-      - name: Unzip artifact
-        run: |
-          # 使用通配符替代变量，避免路径拼接错误
-          unzip -qq "artifacts/${{ needs.build.outputs.artifact }}" -d dir
-          echo "=== 解压结果 ==="
-          ls -R dir/ | head -20
+          cd artifacts
+          echo "=== 文件校验 ==="
+          zip -T *.zip || { echo "❌ ZIP 尾部损坏，请检查 build 阶段的上传是否完整"; exit 1; }
+          
+          echo "=== 使用 7z 解压（比 unzip 更容错） ==="
+          # Runner 已内置 7z，自动处理非标准尾部或编码问题
+          7z x *.zip -o../dir -y -bb1
+          
+          echo "=== 解压结构检查 ==="
+          ls -R ../dir/ | head -25
   
       - name: Setup Pages
         uses: actions/configure-pages@v5
