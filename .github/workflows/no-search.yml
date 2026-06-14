@@ -72,8 +72,9 @@ jobs:
           path: artifacts
       - name: check files
         run: ls -alh artifacts
-      - name: Unzip artifact
-        run: unzip -qq "artifacts/${{ needs.build.outputs.artifact }}" -d dir
+
+      - name: bsdtar artifact
+        run: bsdtar -x -f "artifact/${{needs.build.outputs.artifact}}" -C dir
       
       - name: Setup Pages
         uses: actions/configure-pages@v6
