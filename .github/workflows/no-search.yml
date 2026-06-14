@@ -1,13 +1,12 @@
 name: build no search
+
 on:
-#  push:
-#    branches: ['master']
+  push:
+    branches: ['master']
   workflow_dispatch:
   # 定时的优先级太低，改用定量 push
-  
 permissions:
   id-token: write
-  contents: read
   pages: write
 
 env:
@@ -22,6 +21,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    outputs:
+      artifact: ${{ steps.define-ids.outputs.artifact }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -50,8 +51,37 @@ jobs:
           is-group: ${{ env.IS_GROUP }}
           artifact: ${{ steps.define-ids.outputs.artifact }}
       
-      - name: show FilePath
-        run: ls -alh artifacts
-        
+      - name: Save artifact with build results
+        uses: actions/upload-artifact@v7
+        with:
+          name: docs
+          path: |
+            artifacts/${{ steps.define-ids.outputs.artifact }}
+            artifacts/report.json
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: docs
+          path: artifacts
+      
       - name: Unzip artifact
-        run: unzip -O UTF-8 -qq "artifacts/${{steps.define-ids.outputs.artifact}}" -d dir
+        run: unzip -O UTF-8 -qq "artifacts/${{ needs.build.outputs.artifact }}" -d dir
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v6
+      
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dir
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
