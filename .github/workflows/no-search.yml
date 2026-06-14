@@ -49,12 +49,12 @@ jobs:
           docker-version: ${{ env.DOCKER_VERSION }}
           is-group: ${{ env.IS_GROUP }}
           artifact: ${{ steps.define-ids.outputs.artifact }}
-          
-      - name: show FilePath
-        run: ls -alh && ls -alh artifacts
       
+      - name: show FilePath
+        run: ls -alh artifacts
+        
       - name: Unzip artifact
-        run: unzip -O UTF-8 -qq ${{steps.define-ids.outputs.artifact}} -d dir
+        run: unzip -O UTF-8 -qq "artifacts/${{steps.define-ids.outputs.artifact}}" -d dir
       
       - name: Setup Pages
         uses: actions/configure-pages@v6
