@@ -70,11 +70,25 @@ jobs:
         with:
           name: docs
           path: artifacts
-      - name: check files
-        run: ls -alh artifacts
+          
+      - name: Check & Extract
+        run: |
+          # 1. 验证文件类型
+          echo "=== File type ==="
+          file artifacts/webHelpLUIGITS-DOCS2-all.zip
+          
+          # 2. 安全解压（移除不兼容参数，增加错误拦截）
+          echo "=== Extracting ==="
+          unzip -qq "artifacts/webHelpLUIGITS-DOCS2-all.zip" -d dir || {
+            echo "❌ 解压失败，文件可能损坏或非ZIP格式"
+            exit 1
+          }
+          
+          # 3. 验证解压结果
+          ls -lah dir/
 
-      - name: bsdtar artifact
-        run: bsdtar -x -f "artifact/${{needs.build.outputs.artifact}}" -C dir
+      - name: Unzip artifact
+        run: unzip -qq "${{ needs.build.outputs.artifact }}" -d dir
       
       - name: Setup Pages
         uses: actions/configure-pages@v6
