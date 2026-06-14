@@ -12,8 +12,7 @@ Writerside 的 video 不支持 B 站链接，只能通过内嵌的方式实现�
 
 这是一个合集，共 37 个视频，直接跳转到 B 站观看全部内容。
 
-<inline-frame src="//player.bilibili.com/player.html?isOutside=true&aid=976148468&bvid=BV1944y1x7SW&cid=429330787&p=1" 
-scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="700px" height="394px "/>
+<inline-frame src="//player.bilibili.com/player.html?isOutside=true&aid=976148468&bvid=BV1944y1x7SW&cid=429330787&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="700px" height="394px "/>
 
 这个视频很浅显，没有涉及到深入的部分，仅仅是告诉你它该怎么用，如果想要知道的更详细一些就需要自行寻找视频、文档。
 
